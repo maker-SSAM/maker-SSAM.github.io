@@ -4,7 +4,10 @@
     "role": "초등교사 · 전북",
     "intro": "모든것을 배우고, 모든것을 가르쳐주는 선생님.\n새로운 배움을 즐깁니다.",
     "links": [
-      { "label": "GitHub", "url": "https://github.com/maker-SSAM" }
+      { "label": "GitHub", "url": "https://github.com/maker-SSAM" },
+      { "label": "유튜브 @baek", "url": "https://www.youtube.com/@baek" },
+      { "label": "유튜브 @maker_SSAM", "url": "https://www.youtube.com/@maker_SSAM" },
+      { "label": "브런치", "url": "https://brunch.co.kr/@teacher-baek" }
     ]
   },
   "published": [

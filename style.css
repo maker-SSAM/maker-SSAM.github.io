@@ -47,7 +47,7 @@ a { color: inherit; }
 .profile h1 { margin: 0; font-size: clamp(32px, 6vw, 48px); font-weight: 800; letter-spacing: -0.02em; }
 .profile .role { margin: 6px 0 0; color: var(--muted); font-size: 17px; }
 .profile .intro { margin: 20px 0 0; max-width: 36em; font-size: 18px; white-space: pre-line; }
-.profile .links { display: flex; gap: 12px; margin: 20px 0 0; padding: 0; list-style: none; }
+.profile .links { display: flex; flex-wrap: wrap; gap: 10px 12px; margin: 20px 0 0; padding: 0; list-style: none; }
 .profile .links a {
   display: inline-block; padding: 6px 14px;
   border: 1px solid var(--line); border-radius: 999px;
