@@ -5,6 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>maker_ssam</title>
 <meta name="description" content="초등교사 maker_ssam이 만든 수업 도구와 작업물 모음.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://maker-ssam.github.io/">
+<meta property="og:title" content="maker_ssam">
+<meta property="og:description" content="초등교사 maker_ssam이 만든 수업 도구와 작업물 모음.">
+<meta property="og:image" content="https://maker-ssam.github.io/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="https://maker-ssam.github.io/korean-ofl-fonts/fonts/pretendard/pretendard.css">
 <link rel="stylesheet" href="style.css">
 </head>
@@ -47,7 +56,7 @@ function thumb(w) {
     box.append(img);
   } else {
     box.classList.add('blank');
-    box.textContent = w.title;
+    box.append(el('span', '', '준비 중'));
   }
   return box;
 }
@@ -81,10 +90,13 @@ function profile(p) {
 fetch('works.json')
   .then(r => r.json())
   .then(d => {
-    profile(d.profile);
-    document.getElementById('published').append(...d.published.map(card));
-    document.getElementById('lectures').append(...d.lectures.map(card));
-    document.getElementById('in-progress').append(...d.inProgress.map(card));
+    if (d.profile) profile(d.profile);
+    document.getElementById('published').append(...(d.published || []).map(card));
+    document.getElementById('lectures').append(...(d.lectures || []).map(card));
+    document.getElementById('in-progress').append(...(d.inProgress || []).map(card));
+  })
+  .catch(() => {
+    document.getElementById('published').append(el('p', 'notice', '목록을 불러오지 못했어요. 잠시 뒤 새로고침해 주세요.'));
   });
 </script>
 <!-- 방문 집계: Cloudflare Web Analytics(쿠키 없음). 실제 주소에서만 불러와 로컬 미리보기는 세지 않는다 -->

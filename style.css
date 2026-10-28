@@ -74,10 +74,15 @@ section h2 small { margin-left: 8px; color: var(--muted); font-size: 15px; font-
   transition: transform .15s, border-color .15s;
 }
 a.card:hover { transform: translateY(-2px); border-color: var(--accent); }
+/* 링크 없는 카드(진행 중): 누를 수 없다는 티를 낸다 */
+div.card { background: transparent; border-style: dashed; }
 
 .thumb { aspect-ratio: 16 / 9; background: var(--thumb-bg); overflow: hidden; }
 .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .thumb.blank { display: grid; place-items: center; padding: 16px; text-align: center; color: var(--muted); font-weight: 700; font-size: 18px; }
+.thumb.blank span { padding: 4px 14px; border: 1px dashed var(--muted); border-radius: 999px; font-size: 14px; font-weight: 400; }
+
+.notice { margin: 0; color: var(--muted); }
 
 .body { padding: 16px 18px 18px; }
 .body h3 { margin: 0; font-size: 18px; font-weight: 700; }
