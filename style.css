@@ -1,0 +1,92 @@
+/* 기본 디자인. 나중에 나만의 디자인으로 바꿀 때는 :root 값부터 고친다. */
+:root {
+  --bg: #fafaf9;
+  --surface: #ffffff;
+  --text: #1c1c1e;
+  --muted: #6b6b70;
+  --line: #e6e6e3;
+  --accent: #2f6fed;
+  --tag-bg: #f0f0ee;
+  --thumb-bg: #ecebe8;
+
+  --font: '프리텐다드', system-ui, -apple-system, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  --radius: 14px;
+  --gap: 20px;
+  --max: 1080px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #141416;
+    --surface: #1d1d20;
+    --text: #ececee;
+    --muted: #9a9aa0;
+    --line: #2c2c30;
+    --accent: #7aa2ff;
+    --tag-bg: #26262a;
+    --thumb-bg: #26262a;
+  }
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  line-height: 1.6;
+  word-break: keep-all;
+}
+a { color: inherit; }
+
+.wrap { max-width: var(--max); margin: 0 auto; padding: 0 16px; }
+
+/* 자기소개 */
+.profile { padding: 72px 0 48px; }
+.profile h1 { margin: 0; font-size: clamp(32px, 6vw, 48px); font-weight: 800; letter-spacing: -0.02em; }
+.profile .role { margin: 6px 0 0; color: var(--muted); font-size: 17px; }
+.profile .intro { margin: 20px 0 0; max-width: 36em; font-size: 18px; }
+.profile .links { display: flex; gap: 12px; margin: 20px 0 0; padding: 0; list-style: none; }
+.profile .links a {
+  display: inline-block; padding: 6px 14px;
+  border: 1px solid var(--line); border-radius: 999px;
+  text-decoration: none; font-size: 15px;
+}
+.profile .links a:hover { border-color: var(--accent); color: var(--accent); }
+
+/* 묶음 */
+section { padding: 32px 0; }
+section h2 { margin: 0 0 20px; font-size: 22px; font-weight: 700; }
+section h2 small { margin-left: 8px; color: var(--muted); font-size: 15px; font-weight: 400; }
+
+.grid { display: grid; gap: var(--gap); grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+.grid.small { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+
+/* 카드 */
+.card {
+  display: flex; flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  text-decoration: none;
+  transition: transform .15s, border-color .15s;
+}
+a.card:hover { transform: translateY(-2px); border-color: var(--accent); }
+
+.thumb { aspect-ratio: 16 / 9; background: var(--thumb-bg); overflow: hidden; }
+.thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.thumb.blank { display: grid; place-items: center; padding: 16px; text-align: center; color: var(--muted); font-weight: 700; font-size: 18px; }
+
+.body { padding: 16px 18px 18px; }
+.body h3 { margin: 0; font-size: 18px; font-weight: 700; }
+.body p { margin: 6px 0 0; color: var(--muted); font-size: 15px; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0 0; padding: 0; list-style: none; }
+.tags li { padding: 2px 10px; background: var(--tag-bg); border-radius: 999px; font-size: 13px; color: var(--muted); }
+
+.small .body { padding: 12px 14px 14px; }
+.small .body h3 { font-size: 16px; }
+.small .body p { font-size: 14px; }
+
+footer { padding: 48px 0 64px; color: var(--muted); font-size: 14px; }

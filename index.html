@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>maker_ssam</title>
+<meta name="description" content="초등교사 maker_ssam이 만든 수업 도구와 작업물 모음.">
+<link rel="stylesheet" href="https://maker-ssam.github.io/korean-ofl-fonts/fonts/pretendard/pretendard.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="profile" id="profile"></header>
+
+  <section>
+    <h2>공개한 작업물</h2>
+    <div class="grid" id="published"></div>
+  </section>
+
+  <section>
+    <h2>강의 슬라이드</h2>
+    <div class="grid" id="lectures"></div>
+  </section>
+
+  <section>
+    <h2>진행 중인 작업물 <small>만드는 중이에요</small></h2>
+    <div class="grid small" id="in-progress"></div>
+  </section>
+
+  <footer>© maker_ssam</footer>
+</div>
+
+<script>
+// 내용은 works.json에서만 고친다. 이 파일은 보여 주는 방법만 담는다.
+const el = (tag, cls, text) => {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text) e.textContent = text;
+  return e;
+};
+
+function thumb(w) {
+  const box = el('div', 'thumb');
+  if (w.thumb) {
+    const img = el('img');
+    img.src = w.thumb; img.alt = ''; img.loading = 'lazy';
+    box.append(img);
+  } else {
+    box.classList.add('blank');
+    box.textContent = w.title;
+  }
+  return box;
+}
+
+function card(w) {
+  const c = el(w.url ? 'a' : 'div', 'card');
+  if (w.url) { c.href = w.url; c.target = '_blank'; c.rel = 'noopener'; }
+  const body = el('div', 'body');
+  body.append(el('h3', '', w.title), el('p', '', w.desc));
+  if (w.tags && w.tags.length) {
+    const ul = el('ul', 'tags');
+    w.tags.forEach(t => ul.append(el('li', '', t)));
+    body.append(ul);
+  }
+  c.append(thumb(w), body);
+  return c;
+}
+
+function profile(p) {
+  const h = document.getElementById('profile');
+  h.append(el('h1', '', p.name), el('p', 'role', p.role), el('p', 'intro', p.intro));
+  const ul = el('ul', 'links');
+  (p.links || []).forEach(l => {
+    const li = el('li'), a = el('a', '', l.label);
+    a.href = l.url; a.target = '_blank'; a.rel = 'noopener';
+    li.append(a); ul.append(li);
+  });
+  h.append(ul);
+}
+
+fetch('works.json')
+  .then(r => r.json())
+  .then(d => {
+    profile(d.profile);
+    document.getElementById('published').append(...d.published.map(card));
+    document.getElementById('lectures').append(...d.lectures.map(card));
+    document.getElementById('in-progress').append(...d.inProgress.map(card));
+  });
+</script>
+</body>
+</html>
