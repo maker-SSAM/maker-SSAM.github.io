@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>작업실</title>
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="https://maker-ssam.github.io/korean-ofl-fonts/fonts/pretendard/pretendard.css">
+<link rel="stylesheet" href="../style.css">
+<style>
+  .lock { max-width: 360px; margin: 0 auto; padding: 120px 0 64px; }
+  .lock h1 { margin: 0 0 20px; font-size: 24px; font-weight: 700; }
+  .lock form { display: flex; gap: 8px; }
+  .lock input, .lock button {
+    font: inherit; font-size: 16px; padding: 10px 14px;
+    border: 1px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--text);
+  }
+  .lock input { flex: 1; min-width: 0; }
+  .lock button { cursor: pointer; }
+  .lock button:hover, .lock input:focus { border-color: var(--accent); outline: none; }
+  .lock .msg { min-height: 1.6em; margin: 10px 0 0; color: var(--muted); font-size: 14px; }
+  .desk h1 { margin: 0; padding: 72px 0 8px; font-size: 32px; font-weight: 800; }
+  .links { display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+  .links a {
+    display: block; padding: 14px 16px; text-decoration: none;
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+  }
+  .links a:hover, .links a:focus-visible { border-color: var(--accent); }
+  .links b { display: block; font-weight: 700; }
+  .links span { display: block; margin-top: 2px; color: var(--muted); font-size: 14px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="lock" id="lock">
+    <h1>🔒 작업실</h1>
+    <form id="f">
+      <input type="password" id="pw" placeholder="비밀번호" autocomplete="current-password" autofocus>
+      <button>열기</button>
+    </form>
+    <p class="msg" id="msg"></p>
+  </div>
+  <div class="desk" id="desk" hidden></div>
+</div>
+
+<script>
+// 링크 목록은 아래에 암호화되어 있다. 원본과 만드는 법은 OneDrive Claude-code/desk/ (공개 저장소 밖)
+const BOX = {"iter":600000,"salt":"27OG2Hh09kHaTpF2Iz6tmQ==","iv":"L48o/+jxcD1jJ3VY","ct":"msnY4qgDZH9sbn7Al+f5xOzbXQzN7waAhzKqEv/V2LVVbulz5zRFQxxw6t7kmi4ddJxsNQ6nkGicgsZ4ZWv9JMq7kEKpsTfEKSUo9Sa2rWBx/SW2gRkKXGWaapMMXHfkVMM/cpk2kF06ZP0C9vW86gb4r9JS/7OX4XH7/Br5oWyAWi5jmOqmWBCyH5XzHWE8tWztkBHWwtz3A+qBj4gBgjH/bfURie5566QsDQqqOgoXexLxmBDggdoZM2cFXmLpuVU/Pd4nrfg9BuHpfkv/M9Aokbs+qiHIlz/K6PoTnCN20ExPhGLIdDbCJAOSbUqStCk6uhZzS2IvWoff/aReuBQFLZHj2Nk/C5CVCpIF9Pt9dmIP8quAujs7voy9p6rG6uhxPwMeYsf61eYS3HDtniEv4pIUqmlYqXG5kbecjCifFytxLBx4ZRSknjs0YznPvcJYFzI3hO9nIzFHkwccBmTOTCd+B1UrJYOd2EBa8Fg4tBZFvQCPxUiA2dCergoWc+DtR7ChUVgH5YfdvXxuzTZQJF0uYA4fl73Ik94O/3OXxN9HAZ02BwhuM2vVSZKnMpiNHZHCV5G34v4K9uS6I5dB8pzE98pPdFF0AWPbfy2Zh8fL5TARccoU5M5anFugmmtC4FrvJjxs4pzlvyBgThhGhfY9i0eNbK6OapFMz0hm7hEp+/7okj9cVj8Yoe77LUKsApMgDrNSYB+fFU5CiZ46zkL5VobRvFkagIBu7QZFHw0vET2zTxq9j2k1FlX6pzXX7YzHFk45ohSqtirHOD+CVF8ksvnN3fcOlLQeOlmQOtKXY/SxKWn8XD6fzT8hE6LU5s24BerijLQ8SWiJEHDG79wNEJ1C2UsmsXS1Nyo0l+sZb5tC8jRWu3vwNbabm8OjXwEiRyM7F0ImkY4qK46N1BJjUilf/VxjMnDZIZkojLDuEKOVhp1zbqpXXnoWmNcOVkZSwny7xNn91A=="};
+const b64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text) e.textContent = text; return e; };
+
+async function open(pw) {
+  const base = await crypto.subtle.importKey('raw', new TextEncoder().encode(pw.normalize('NFC')), 'PBKDF2', false, ['deriveKey']);
+  const key = await crypto.subtle.deriveKey({ name: 'PBKDF2', salt: b64(BOX.salt), iterations: BOX.iter, hash: 'SHA-256' },
+    base, { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
+  const plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64(BOX.iv) }, key, b64(BOX.ct));
+  return JSON.parse(new TextDecoder().decode(plain));
+}
+
+function show(d) {
+  const desk = document.getElementById('desk');
+  desk.append(el('h1', '', d.title || '작업실'));
+  (d.groups || []).forEach(g => {
+    const s = el('section'); s.append(el('h2', '', g.title));
+    const box = el('div', 'links');
+    (g.links || []).forEach(l => {
+      const a = el('a'); a.href = l.url; a.target = '_blank'; a.rel = 'noopener noreferrer';
+      a.append(el('b', '', l.label));
+      if (l.note) a.append(el('span', '', l.note));
+      box.append(a);
+    });
+    s.append(box); desk.append(s);
+  });
+  document.getElementById('lock').hidden = true;
+  desk.hidden = false;
+}
+
+document.getElementById('f').addEventListener('submit', async e => {
+  e.preventDefault();
+  const msg = document.getElementById('msg');
+  msg.textContent = '여는 중…';
+  try { show(await open(document.getElementById('pw').value)); }
+  catch { msg.textContent = '비밀번호가 맞지 않아요.'; }
+});
+</script>
+</body>
+</html>

@@ -95,3 +95,6 @@ div.card { background: transparent; border-style: dashed; }
 .small .body p { font-size: 14px; }
 
 footer { padding: 48px 0 64px; color: var(--muted); font-size: 14px; }
+/* 작업실(비밀번호 페이지) 입구: 눈에 띄지 않게 */
+.desk-door { display: inline-grid; place-items: center; width: 32px; height: 32px; margin-left: 4px; vertical-align: middle; opacity: .35; }
+.desk-door:hover, .desk-door:focus-visible { opacity: 1; color: var(--accent); }
